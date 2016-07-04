@@ -31,13 +31,15 @@ def register(request):
 def friends(request):
 
 	currentuser = User.userManager.get(id = request.session['id'])
+	not_friend = User.userManager.exclude(addingu__currentuser = currentuser)
 	buddy = User.userManager.filter(addingu__currentuser =currentuser)
 	context = {
 		"cuser" : currentuser,
 		"friends": buddy,
-		"users" : User.userManager.exclude(id = request.session['id'])
+		"users" : User.userManager.exclude(id = request.session['id']),
+		"not_friends" : not_friend
 	}
-	print buddy
+	print not_friend
 	return render (request, "index2.html", context)
 
 def login(request):
@@ -94,14 +96,9 @@ def remove(request,id):
 			print removing
 			if current and removing:
 				print "starting the removing process"
-				remove = User.userManager.filter(addingu__currentuser = current)[0]
-
-				for i in remove:
-					if i == removing[0] :
-						print i
-						one = User.userManager.filter(addingu__currentuser = current).remove(i)
-						print "Friend is removed!!! OH NOOOOOOOOOOOOOOOOO"
-						return redirect(reverse('friends'))
+				Friends.objects.filter(currentuser = current[0], friend = removing[0]).delete()
+				print "Friend is removed!!! OH NOOOOOOOOOOOOOOOOO"
+				return redirect(reverse('friends'))
 		except:
 			return redirect(reverse('friends'))
 
