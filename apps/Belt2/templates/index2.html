@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<title></title>
+</head>
+<body>
+	<div class="ct">
+		<div class="header">
+			<h4>WELCOME! <span>{{ cuser.first_name }}</span></h4>
+			<p class="headlink"><a href="{% url 'main' %}">Log Off</a></p>
+		</div>
+		<div class="body">
+			<h1>Hello, <span>{{ cuser.first_name }}!</span></h1>
+			<h3>Here is the list of your friends:</h3>
+			<table>
+				<thead>
+					<th>Alias</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					{% if friends %}
+					{% for friend in friends %}
+					<tr>
+						<td>{{ friend.alias }}</td>
+						<td><a href="{% url 'profile' friend.id %}">view profile</a> | <a href="{% url 'remove' friend.id %}">Remove as Friend</a></td>
+					</tr>
+					{% endfor %}
+					{%else%}
+					<p>You don't have friends yet</p>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+		<div class="body">
+			<h3>Other Users not on your friend's list:</h3>
+			<table>
+				<thead>
+					<th>Alias</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr>
+						{%  for user in users %}
+						{% if user != cuser %}
+						<td><a href="{% url 'profile' user.id  %}">{{ user.alias }}</a></td>
+						<td><form action="{% url 'addfriend' user.id %}" method="post">
+						{% csrf_token %}
+						<input type="submit" value="Add as Friend">
+						</form></td>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+
+	</div>
+</body>
+</html>

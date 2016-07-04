@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<title></title>
+</head>
+<body>
+	<div class="header">
+		<p class="headlink"><a href="{% url 'friends' %}">Home</a></p>
+		<p class="headlink"><a href="{% url 'main' %}">Log Off</a></p>
+		</div>
+	<div class="body">
+		<h1>{{ user.first_name }} 's Profile</h1>
+		<h3>Name: {{ user.first_name }} {{ user.last_name }}</h3>		
+		<h3>Email Address:{{ user.email }} </h3>
+	</div>
+</body>
+</html>
